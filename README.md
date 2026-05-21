@@ -1,7 +1,3 @@
-<p align="center">
-  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Laravel.svg/1200px-Laravel.svg.png" width="80" alt="Laravel Logo">
-</p>
-
 <h1 align="center">FlashQuest ⚡</h1>
 
 <p align="center">
@@ -105,6 +101,5 @@ php artisan serve
 
 Acesse no seu navegador: `http://localhost:8000`
 
----
 
 > **Desenvolvido com foco e disciplina para estudantes de alta performance.** 🚀
