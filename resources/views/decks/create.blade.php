@@ -1,49 +1,51 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="max-w-3xl mx-auto bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-8">
-    <div class="flex justify-between items-center mb-6">
-        <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Criar Novo Deck</h2>
-        <a href="{{ route('decks.index') }}" class="text-gray-500 hover:text-gray-700">Voltar</a>
+<div class="max-w-2xl mx-auto">
+    <div class="flex items-center mb-6">
+        <a href="{{ route('decks.index') }}" class="text-slate-500 hover:text-white mr-4 transition">
+            <i class="fa-solid fa-arrow-left text-xl"></i>
+        </a>
+        <h2 class="text-2xl font-bold text-white uppercase tracking-tight">Criar Novo Deck</h2>
     </div>
 
-    <form action="{{ route('decks.store') }}" method="POST">
-        @csrf
-        
-        <div class="space-y-4">
-            <div>
-                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nome do Deck</label>
-                <input type="text" name="name" required class="w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="Ex: Inglês Básico">
+    <div class="bg-slate-900 border border-slate-800 rounded shadow-sm p-8">
+        <form action="{{ route('decks.store') }}" method="POST">
+            @csrf
+            
+            <div class="mb-6">
+                <label for="name" class="block text-sm font-bold tracking-widest text-slate-400 uppercase mb-2">Nome do Deck</label>
+                <input type="text" name="name" id="name" required class="w-full bg-slate-950 border border-slate-800 rounded px-4 py-3 text-white focus:outline-none focus:border-slate-500 transition">
             </div>
 
-            <div>
-                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Descrição</label>
-                <textarea name="description" rows="3" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="O que você vai aprender com este deck?"></textarea>
+            <div class="mb-6">
+                <label for="description" class="block text-sm font-bold tracking-widest text-slate-400 uppercase mb-2">Descrição</label>
+                <textarea name="description" id="description" rows="3" class="w-full bg-slate-950 border border-slate-800 rounded px-4 py-3 text-white focus:outline-none focus:border-slate-500 transition"></textarea>
             </div>
 
-            <div class="grid grid-cols-2 gap-4">
+            <div class="grid grid-cols-2 gap-6 mb-6">
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Categoria</label>
-                    <input type="text" name="category" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="Ex: Idiomas">
+                    <label for="color" class="block text-sm font-bold tracking-widest text-slate-400 uppercase mb-2">Cor (Hex)</label>
+                    <input type="color" name="color" id="color" value="#334155" class="w-full h-12 bg-slate-950 border border-slate-800 rounded p-1 cursor-pointer">
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Cor Base (HEX)</label>
-                    <input type="color" name="color" value="#4f46e5" class="w-full h-10 rounded-lg cursor-pointer">
+                    <label for="icon" class="block text-sm font-bold tracking-widest text-slate-400 uppercase mb-2">Ícone (FA Class)</label>
+                    <input type="text" name="icon" id="icon" value="fa-solid fa-folder" placeholder="Ex: fa-solid fa-book" class="w-full bg-slate-950 border border-slate-800 rounded px-4 py-3 text-white focus:outline-none focus:border-slate-500 transition">
                 </div>
             </div>
 
-            <div class="flex items-center">
+            <div class="mb-8 flex items-center">
                 <input type="hidden" name="is_public" value="0">
-                <input type="checkbox" name="is_public" value="1" id="is_public" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
-                <label for="is_public" class="ml-2 text-sm text-gray-700 dark:text-gray-300">Tornar Deck Público (outros usuários poderão clonar)</label>
+                <input type="checkbox" name="is_public" id="is_public" value="1" class="w-5 h-5 bg-slate-950 border-slate-800 rounded text-slate-500 focus:ring-slate-500">
+                <label for="is_public" class="ml-3 text-sm font-bold tracking-widest text-slate-300 uppercase">Tornar Público</label>
             </div>
-        </div>
 
-        <div class="mt-8">
-            <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-lg transition">
-                Criar Deck
-            </button>
-        </div>
-    </form>
+            <div class="flex justify-end">
+                <button type="submit" class="bg-white hover:bg-slate-200 text-slate-900 px-8 py-3 rounded text-sm font-bold uppercase tracking-widest transition shadow">
+                    Cadastrar Deck
+                </button>
+            </div>
+        </form>
+    </div>
 </div>
 @endsection

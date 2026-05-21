@@ -1,92 +1,71 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="max-w-7xl mx-auto space-y-6">
-    <!-- Header do Deck -->
-    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 flex items-center justify-between">
-        <div class="flex items-center space-x-4">
-            <div class="w-16 h-16 rounded-lg flex items-center justify-center text-white text-2xl" style="background-color: {{ $deck->color ?? '#4f46e5' }}">
-                <i class="{{ $deck->icon ?? 'fa-solid fa-layer-group' }}"></i>
+<div class="max-w-6xl mx-auto space-y-6">
+    <div class="flex items-center mb-2">
+        <a href="{{ route('decks.index') }}" class="text-slate-500 hover:text-white mr-4 transition">
+            <i class="fa-solid fa-arrow-left text-xl"></i>
+        </a>
+        <h2 class="text-2xl font-bold text-white uppercase tracking-tight flex items-center gap-3">
+            <div class="w-10 h-10 rounded flex items-center justify-center text-white" style="background-color: {{ empty($deck->color) ? '#334155' : $deck->color }}">
+                <i class="{{ empty($deck->icon) ? 'fa-solid fa-folder' : $deck->icon }} text-lg"></i>
             </div>
-            <div>
-                <h2 class="text-2xl font-bold text-gray-800 dark:text-white">{{ $deck->name }}</h2>
-                <p class="text-gray-500 dark:text-gray-400 text-sm">{{ $deck->cards->count() }} cards registrados</p>
-            </div>
-        </div>
-        <div class="flex space-x-2">
-            <a href="{{ route('study.index', $deck) }}" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-lg font-semibold transition">
-                <i class="fa-solid fa-play mr-2"></i> Estudar Agora
-            </a>
-            <form action="{{ route('decks.destroy', $deck) }}" method="POST" onsubmit="return confirm('Deletar deck?');">
-                @csrf @method('DELETE')
-                <button type="submit" class="bg-red-50 hover:bg-red-100 text-red-600 px-4 py-2 rounded-lg transition">
-                    <i class="fa-solid fa-trash"></i>
-                </button>
-            </form>
-        </div>
+            {{ $deck->name }}
+        </h2>
     </div>
 
-    @if(session('success'))
-        <div class="bg-green-100 text-green-800 p-4 rounded-lg shadow-sm">
-            {{ session('success') }}
-        </div>
-    @endif
-
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        
-        <!-- Adicionar Card -->
-        <div class="md:col-span-1">
-            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
-                <h3 class="text-lg font-bold text-gray-800 dark:text-white mb-4">Adicionar Card</h3>
-                <form action="{{ route('cards.store', $deck) }}" method="POST">
-                    @csrf
-                    <div class="space-y-4">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Frente (Pergunta)</label>
-                            <textarea name="front" rows="3" required class="w-full rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"></textarea>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Verso (Resposta)</label>
-                            <textarea name="back" rows="3" required class="w-full rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"></textarea>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Dica (Opcional)</label>
-                            <input type="text" name="hint" class="w-full rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-                        </div>
-                        <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-lg transition">
-                            + Salvar Card
-                        </button>
-                    </div>
-                </form>
+    <!-- Add Card Form -->
+    <div class="bg-slate-900 border border-slate-800 shadow-sm rounded p-6 mb-6 mt-4">
+        <h3 class="font-bold text-white uppercase tracking-widest text-sm mb-4"><i class="fa-solid fa-plus-circle text-slate-500 mr-2"></i> Adicionar Nova Carta</h3>
+        <form action="{{ route('cards.store', $deck) }}" method="POST">
+            @csrf
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div>
+                    <label for="front" class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Frente (Pergunta)</label>
+                    <textarea name="front" id="front" rows="2" required class="w-full bg-slate-950 text-white border border-slate-800 rounded focus:ring-0 focus:border-slate-500 transition px-4 py-2 resize-none overflow-hidden" oninput="this.style.height = ''; this.style.height = this.scrollHeight + 'px'"></textarea>
+                </div>
+                <div>
+                    <label for="back" class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Verso (Resposta)</label>
+                    <textarea name="back" id="back" rows="2" required class="w-full bg-slate-950 text-white border border-slate-800 rounded focus:ring-0 focus:border-slate-500 transition px-4 py-2 resize-none overflow-hidden" oninput="this.style.height = ''; this.style.height = this.scrollHeight + 'px'"></textarea>
+                </div>
             </div>
-        </div>
+            <div class="mb-4">
+                <label for="hint" class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Dica (Opcional)</label>
+                <input type="text" name="hint" id="hint" class="w-full bg-slate-950 text-white border border-slate-800 rounded focus:ring-0 focus:border-slate-500 transition px-4 py-2">
+            </div>
+            <div class="flex justify-end">
+                <button type="submit" class="bg-white hover:bg-slate-200 text-slate-900 font-bold py-2 px-6 rounded text-sm uppercase tracking-widest transition">
+                    Salvar Carta
+                </button>
+            </div>
+        </form>
+    </div>
 
-        <!-- Lista de Cards -->
-        <div class="md:col-span-2 space-y-4">
-            @forelse ($deck->cards as $card)
-                <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700 flex justify-between items-start group">
-                    <div class="grid grid-cols-2 gap-4 flex-1 pr-4">
-                        <div>
-                            <span class="text-xs text-gray-400 block mb-1 uppercase font-semibold">Frente</span>
-                            <div class="text-sm text-gray-800 dark:text-gray-200">{{ $card->front }}</div>
+    <!-- Cards List -->
+    <div class="bg-slate-900 border border-slate-800 shadow-sm rounded overflow-hidden">
+        <div class="p-6 border-b border-slate-800 flex justify-between items-center">
+            <h3 class="font-bold text-slate-300 uppercase tracking-widest text-sm">Cartões do Deck ({{ $deck->cards->count() }})</h3>
+        </div>
+        <div class="p-6">
+            @if($deck->cards->count() > 0)
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    @foreach($deck->cards as $card)
+                        <div class="bg-slate-950 border border-slate-800 p-4 rounded flex justify-between items-start">
+                            <div class="min-w-0 pr-4">
+                                <div class="font-bold text-white mb-2 break-all">{{ $card->front }}</div>
+                                <div class="text-sm text-slate-400 break-all">{{ $card->back }}</div>
+                            </div>
+                            <div class="flex gap-2 text-slate-500">
+                                <span class="text-xs font-bold bg-slate-800 px-2 py-1 rounded">Nível {{ $card->repetition_level }}</span>
+                            </div>
                         </div>
-                        <div>
-                            <span class="text-xs text-gray-400 block mb-1 uppercase font-semibold">Verso</span>
-                            <div class="text-sm text-gray-800 dark:text-gray-200">{{ $card->back }}</div>
-                        </div>
-                    </div>
-                    <div class="opacity-0 group-hover:opacity-100 transition">
-                        <form action="{{ route('cards.destroy', $card) }}" method="POST" onsubmit="return confirm('Remover card?');">
-                            @csrf @method('DELETE')
-                            <button type="submit" class="text-red-500 hover:text-red-700 p-2"><i class="fa-solid fa-trash"></i></button>
-                        </form>
-                    </div>
+                    @endforeach
                 </div>
-            @empty
-                <div class="text-center py-12 text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 rounded-lg">
-                    Ainda não há cards neste deck. Comece a criar ao lado!
+            @else
+                <div class="text-center py-10 text-slate-500 font-medium">
+                    Nenhum cartão adicionado a este deck ainda.
                 </div>
-            @endforelse
+            @endif
         </div>
     </div>
 </div>

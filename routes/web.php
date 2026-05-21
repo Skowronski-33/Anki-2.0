@@ -5,6 +5,7 @@ use App\Http\Controllers\DeckController;
 use App\Http\Controllers\CardController;
 use App\Http\Controllers\StudyController;
 use App\Http\Controllers\GamificationController;
+use App\Http\Controllers\StatsController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -32,6 +33,7 @@ Route::middleware('auth')->group(function () {
     
     Route::get('/leaderboard', [GamificationController::class, 'leaderboard'])->name('leaderboard');
     Route::get('/achievements', [GamificationController::class, 'achievements'])->name('achievements');
+    Route::get('/stats', [StatsController::class, 'index'])->name('stats.index');
 });
 
 Route::get('/u/{user}', [ProfileController::class, 'show'])->name('profile.show');

@@ -48,6 +48,15 @@ class SpacedRepetitionService
         $session->next_review_at = now()->addDays($interval);
         $session->save();
 
+        \App\Models\ReviewLog::create([
+            'user_id' => $userId,
+            'card_id' => $cardId,
+            'deck_id' => $card->deck_id,
+            'rating' => $rating,
+            'interval_days' => $interval,
+            'ease_factor' => $easeFactor,
+        ]);
+
         return $session;
     }
 }

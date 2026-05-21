@@ -16,11 +16,16 @@ class StudyController extends Controller
         return view('study.index', compact('deck'));
     }
 
-    public function nextCards(Deck $deck)
+    public function nextCards(Request $request, Deck $deck)
     {
         if ($deck->user_id !== auth()->id() && !$deck->is_public) abort(403);
 
         $userId = auth()->id();
+        
+        if ($request->query('force_all')) {
+            $allCards = $deck->cards()->inRandomOrder()->take(20)->get();
+            return response()->json(['cards' => $allCards]);
+        }
         
         // Get cards due for review
         $dueCards = $deck->cards()->whereHas('studySessions', function($q) use ($userId) {
@@ -63,11 +68,11 @@ class StudyController extends Controller
         $streakService->updateStreak($user);
 
         // Update stats
-        $stats = $user->stats;
-        if($stats) {
-            $stats->cards_reviewed_total += 1;
-            $stats->save();
-        }
+        $stats = $user->stats()->first() ?? current([new \App\Models\UserStat(['user_id' => $user->id])]);
+        $stats->cards_reviewed_total += 1;
+        $stats->save();
+
+        $user->refresh();
 
         return response()->json([
             'success' => true,

@@ -30,6 +30,8 @@ class DeckController extends Controller
         ]);
 
         $deck = auth()->user()->decks()->create($validated);
+        
+        app(\App\Services\GamificationService::class)->checkAchievements(auth()->user());
 
         return redirect()->route('decks.show', $deck)->with('success', 'Deck criado! Adicione suas cartas abaixo.');
     }

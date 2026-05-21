@@ -32,7 +32,9 @@ class GamificationService
 
     public function checkAchievements(User $user)
     {
-        $stats = $user->stats;
+        $stats = $user->stats()->first();
+        if (!$stats) return;
+        
         $achievements = Achievement::whereNotIn('id', $user->achievements->pluck('id'))->get();
 
         foreach ($achievements as $achievement) {
@@ -48,7 +50,9 @@ class GamificationService
                 case 'streak':
                     if ($stats->streak_days >= $achievement->condition_value) $unlocked = true;
                     break;
-                // other conditions like 'decks_created' can be added
+                case 'decks_created':
+                    if ($user->decks()->count() >= $achievement->condition_value) $unlocked = true;
+                    break;
             }
 
             if ($unlocked) {
